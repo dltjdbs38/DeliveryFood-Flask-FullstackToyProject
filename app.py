@@ -1,4 +1,4 @@
-from flask import Flask,jsonify,request,render_template
+from flask import Flask,jsonify,request,render_template,redirect
 app = Flask(__name__)
 
 user_list = [
@@ -24,6 +24,33 @@ def home_page():
 def regist_page():
     return render_template('register.html')
 
+@app.route('/board', methods=['GET'])
+def board_page():
+    return render_template('board.html')
+
+@app.route('/login', methods=['GET'])
+def login_page():
+    return render_template('login.html')
+
+@app.route('/register', methods=['POST']) # POST 메소드, 데이터를 html에서 입력받고 저장?
+def register_service():
+    id = request.form['username'] # <input name="username"> 태그로부터
+    pw = request.form['password'] # <input name="password"> 태그로부터
+
+    user = {'name':id, 'password':pw}
+    user_list.append(user)
+    return redirect('/')
+
+@app.route('/board', methods=['POST'])
+def writer_service():
+    name = request.form['username']
+    content = request.form['content']
+    data = {'name':name, 'content':content}
+    board_list.append(data)
+    return redirect('/board')
+
+@app.route('/board/<id>')
+def edit_board(id)
 
 
 if __name__=='__main__': # 파일 이름이 main일때만 app.run()이 실행되도록 한다.
